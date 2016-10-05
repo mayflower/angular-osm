@@ -25,20 +25,30 @@ export function main() {
                     defer?: boolean;
                     type?: string;
                 }
-                const scriptElem: Script = {};
-                (<jasmine.Spy>doc.createElement).and.returnValue(scriptElem);
+
+                const OSMScriptElement: Script = {};
+                const OLScriptElement: Script = {};
+
+                (<jasmine.Spy>doc.createElement).and.returnValues(OLScriptElement, OSMScriptElement);
                 doc.body = jasmine.createSpyObj('body', ['appendChild']);
 
                 loader.load();
+
                 expect(doc.createElement).toHaveBeenCalled();
-                expect(scriptElem.type).toEqual('text/javascript');
-                expect(scriptElem.async).toEqual(true);
-                expect(scriptElem.defer).toEqual(true);
-                expect(scriptElem.src).toBeDefined();
-                expect(scriptElem.src).toContain('https://maps.googleapis.com/maps/api/js');
-                expect(scriptElem.src).toContain('v=3');
-                expect(scriptElem.src).toContain('callback=angular2GoogleMapsLazyMapsAPILoader');
-                expect(doc.body.appendChild).toHaveBeenCalledWith(scriptElem);
+                expect(OLScriptElement.type).toEqual('text/javascript');
+                expect(OLScriptElement.async).toEqual(true);
+                expect(OLScriptElement.src).toBeDefined();
+                expect(OLScriptElement.defer).toEqual(true);
+                expect(OLScriptElement.src).toContain('http://www.openlayers.org/api/OpenLayers.js');
+                expect(doc.body.appendChild).toHaveBeenCalledWith(OLScriptElement);
+
+                expect(doc.createElement).toHaveBeenCalled();
+                expect(OSMScriptElement.type).toEqual('text/javascript');
+                expect(OSMScriptElement.async).toEqual(true);
+                expect(OSMScriptElement.defer).toEqual(true);
+                expect(OSMScriptElement.src).toBeDefined();
+                expect(OSMScriptElement.src).toContain('http://www.openstreetmap.org/openlayers/OpenStreetMap.js');
+                expect(doc.body.appendChild).toHaveBeenCalledWith(OSMScriptElement);
             }));
     });
 }

@@ -36,7 +36,7 @@ export interface APILoaderConfigLiteral {
 export class APILoaderConfig implements APILoaderConfigLiteral {
   hostAndPath: string = 'osm ...';
   protocol: ScriptProtocol = ScriptProtocol.HTTPS;
-  apiVersion: string = "1";
+  apiVersion: string = '1';
 }
 
 const DEFAULT_CONFIGURATION = new APILoaderConfig();
@@ -48,10 +48,9 @@ export class APILoader {
   private _document: Document;
   private _loadingPromise: Promise<void[]>;
 
-  constructor(
-      @Optional() config: APILoaderConfig, @Inject(WINDOW_GLOBAL) w: Window,
-      @Inject(DOCUMENT_GLOBAL) d: Document) {
-    super();
+  constructor(@Optional() config: APILoaderConfig,
+              @Inject(WINDOW_GLOBAL) w: Window,
+              @Inject(DOCUMENT_GLOBAL) d: Document) {
     this._config = config || DEFAULT_CONFIGURATION;
     this._window = w;
     this._document = d;
@@ -66,29 +65,32 @@ export class APILoader {
     scriptOsm.type = 'text/javascript';
     scriptOsm.async = true;
     scriptOsm.defer = true;
-    scriptOsm.src = "http://www.openlayers.org/api/OpenLayers.js";
+    scriptOsm.src = 'http://www.openlayers.org/api/OpenLayers.js';
 
-    let openStreetMapPromise = new Promise<void>((resolve: Function, reject: Function) => {
-      (<any>this._window)["OSM"] = () => { resolve(); };
+    let openStreetMapPromise =
+        new Promise<void>((resolve: Function, reject: Function) => {
+          (<any>this._window)['OSM'] = () => { resolve(); };
 
-      scriptOsm.onerror = (error: Event) => { reject(error); };
-    });
-    this._document.body.appendChild(scriptOL);
+          scriptOsm.onerror = (error: Event) => { reject(error); };
+        });
+    this._document.body.appendChild(scriptOsm);
 
     const scriptOL = this._document.createElement('script');
     scriptOL.type = 'text/javascript';
     scriptOL.async = true;
     scriptOL.defer = true;
-    scriptOL.src = "http://www.openstreetmap.org/openlayers/OpenStreetMap.js";
+    scriptOL.src = 'http://www.openstreetmap.org/openlayers/OpenStreetMap.js';
 
-    let openLayersPromise = new Promise<void>((resolve: Function, reject: Function) => {
-      (<any>this._window)["OpenLayers"] = () => { resolve(); };
+    let openLayersPromise =
+        new Promise<void>((resolve: Function, reject: Function) => {
+          (<any>this._window)['OpenLayers'] = () => { resolve(); };
 
-      scriptOL.onerror = (error: Event) => { reject(error); };
-    });
+          scriptOL.onerror = (error: Event) => { reject(error); };
+        });
     this._document.body.appendChild(scriptOL);
 
-    this._loadingPromise = Promise.all([openStreetMapPromise, openLayersPromise]);
+    this._loadingPromise =
+        Promise.all([ openStreetMapPromise, openLayersPromise ]);
 
     return this._loadingPromise;
   }
@@ -100,11 +102,13 @@ export class APILoader {
 export function provideAPILoaderConfig(confLiteral: APILoaderConfigLiteral):
     Provider {
   return {
-    provide: APILoaderConfig,
-    useFactory: () => {
+    provide : APILoaderConfig,
+    useFactory : () => {
       const config = new APILoaderConfig();
-      config.apiVersion = confLiteral.apiVersion || DEFAULT_CONFIGURATION.apiVersion;
-      config.hostAndPath = confLiteral.hostAndPath || DEFAULT_CONFIGURATION.hostAndPath;
+      config.apiVersion =
+          confLiteral.apiVersion || DEFAULT_CONFIGURATION.apiVersion;
+      config.hostAndPath =
+          confLiteral.hostAndPath || DEFAULT_CONFIGURATION.hostAndPath;
       config.protocol = config.protocol || DEFAULT_CONFIGURATION.protocol;
       return config;
     }
