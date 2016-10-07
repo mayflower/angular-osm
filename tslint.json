@@ -1,6 +1,6 @@
 {
-	"rules": {
-		"class-name": true,
+  "rules": {
+    "class-name": true,
     "comment-format": [
       true,
       "check-space"
@@ -24,10 +24,10 @@
     "no-trailing-whitespace": true,
     "no-unreachable": true,
     "no-unused-expression": true,
-		"no-unused-variable": [
-			true,
-			"check-parameters"
-		],
+    "no-unused-variable": [
+      true,
+      "check-parameters"
+    ],
     "no-use-before-declare": true,
     "no-var-requires": true,
     "one-line": [
@@ -77,5 +77,5 @@
       "check-separator",
       "check type"
     ]
-	}
+  }
 }
