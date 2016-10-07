@@ -64,11 +64,10 @@ gulp.task('scripts:cjs', () => {
 gulp.task('scripts:test', () => {
   const tsResult = gulp.src(config.PATHS.tsTestFiles)
                   .pipe(sourcemaps.init())
-                  .pipe($.typescript(config.taskConfigCjs));
-
+                  .pipe($.typescript(config.tscConfigCjs));
   // todo: figure out why gulp-typescript don't write to the defined root dir (test-built)
   function replaceTestDir(path) {
-    path.dirname = path.dirname.replace('test/', ''); // eslint-disable-line no-param-reassign
+    path.dirname = path.dirname.replace('/^test/ig', ''); // eslint-disable-line no-param-reassign
   }
   return merge([
     tsResult.dts
